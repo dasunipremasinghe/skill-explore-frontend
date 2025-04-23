@@ -1,51 +1,102 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import '../CSS/GoogleLoginButton.css';
+
 
 const GoogleLoginButton: React.FC = () => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSuccess = (credentialResponse: CredentialResponse) => {
+  const handleNormalLogin = () => {
+    if (!email || !password) {
+      alert("Please enter both email and password.");
+      return;
+    }
+
+    fetch("http://localhost:8080/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Login success:", data);
+        localStorage.setItem("auth_token", data.token);
+        localStorage.setItem("user_name", `${data.firstName} ${data.lastName}`);
+        localStorage.setItem("user_email", data.email);
+        navigate('/profile');
+      })
+      .catch(err => {
+        console.error("Login error:", err);
+        alert("Login failed. Please check your credentials.");
+      });
+  };
+
+  const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
     const token = credentialResponse.credential;
-    console.log("Received Google token:", token); //Add this
-  
     if (!token) {
       console.error("No token received from Google");
       return;
     }
-  
+
     fetch("http://localhost:8080/api/auth/google", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ token }),
-      mode: "cors", //Always include this when talking to a different port
+      mode: "cors",
     })
-      .then(res => {
-        console.log("🔁 Response status:", res.status);
-        return res.json();
-      })
+      .then(res => res.json())
       .then(data => {
-        console.log("User Info:", data);
-
-      const fullName = `${data.firstName} ${data.lastName}`;
-      localStorage.setItem("google_token", token);
-      localStorage.setItem("user_name", fullName);
-      localStorage.setItem("user_email", data.email);
+        const fullName = `${data.firstName} ${data.lastName}`;
+        localStorage.setItem("google_token", token);
+        localStorage.setItem("user_name", fullName);
+        localStorage.setItem("user_email", data.email);
         navigate('/profile');
       })
       .catch(err => {
         console.error("Login failed:", err.message || err);
+        alert("Login failed: Something went wrong during Google authentication");
       });
   };
-  
 
   return (
     <div className="google-login-container">
-      <GoogleLogin
-  onSuccess={handleSuccess}
-  onError={() => console.log('Login Failed')}
-/>
+      <h2>Login</h2>
+      <input
+        type="email"
+        placeholder="Email"
+        value={email}
+        className="auth-input"
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        className="auth-input"
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <button className="auth-button" onClick={handleNormalLogin}>
+        Login
+      </button>
+
+      <p className="separator">or</p>
+
+      <div className="google-button">
+        <GoogleLogin
+          onSuccess={handleGoogleSuccess}
+          onError={() => {
+            console.log('Google Login Failed');
+            alert('Google Login Failed');
+          }}
+        />
+      </div>
+
+      <p className="signup-link">
+        Don't have an account? <span onClick={() => navigate('/signup')}>Sign Up</span>
+      </p>
     </div>
   );
 };
