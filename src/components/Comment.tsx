@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { commentService } from "../services/CommentService";
-import '../css/Comment.css'
+import '../CSS/Comment.css'
 
 interface User {
   id: string | number;
