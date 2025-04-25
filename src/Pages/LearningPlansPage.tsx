@@ -43,6 +43,20 @@ const LearningPlansPage: React.FC = () => {
       alert("Failed to delete plan.");
     }
   };
+
+  const handleArchiveToggle = async (id: string) => {
+    try {
+      const updatedPlan = await apiFetch<LearningPlan>(`/learning-plans/archive/${id}`, {
+        method: "PUT"
+      });
+  
+      setPlans(plans.map(plan => plan.id === id ? updatedPlan : plan));
+    } catch (err) {
+      console.error("Archive toggle failed", err);
+      alert("Failed to update archive status.");
+    }
+  };
+  
   
   
   return (
@@ -65,7 +79,12 @@ const LearningPlansPage: React.FC = () => {
             <Link to={`/plans/edit/${plan.id}`}>
             <button>Edit</button>
             </Link>
-            <button style={{ marginLeft: "1rem", backgroundColor: "#ff4d4d", color: "white" }}onClick={() => handleDelete(plan.id)}>Delete</button>
+            <button style={{ marginLeft: "1rem", backgroundColor: "#ff4d4d", color: "white" }}onClick={() => handleDelete(plan.id)}>
+                    Delete</button>
+            <button style={{ marginLeft: "1rem", backgroundColor: "#888", color: "white" }}onClick={() => handleArchiveToggle(plan.id)}>
+                    {plan.archived ? "Unarchive" : "Archive"}
+            </button>
+        
           </li>
         ))}
       </ul>
