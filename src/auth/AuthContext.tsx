@@ -1,19 +1,19 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-type User = {
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export type User = {
   email: string;
   name?: string;
 };
 
-type AuthContextType = {
+export type AuthContextType = {
   token: string | null;
   user: User | null;
   login: (token: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
 };
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [token, setToken] = useState<string | null>(localStorage.getItem("google_token"));
@@ -67,5 +67,5 @@ export const useAuth = (): AuthContextType => {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-};
+};5
 

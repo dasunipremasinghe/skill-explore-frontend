@@ -1,12 +1,15 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import LearningPlansPage from "./Pages/LearningPlansPage";
+
 
 import HomePage from './Pages/HomePage';
 import Profile from './Pages/ProfilePage';
 import CreateLearningPlanForm from "./Pages/CreateLearningPlanForm";
 import EditLearningPlanForm from "./Pages/EditLearningPlanForm";
+import LearningPlansPage from "./Pages/LearningPlansPage";
+import ExplorePlansPage from "./Pages/ExplorePlansPage";
+
 const App: React.FC = () => {
   return (
     
@@ -16,6 +19,7 @@ const App: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/plans" element={<LearningPlansPage />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/explore" element={<ExplorePlansPage />} />
           <Route path="/plans/create" element={<CreateLearningPlanForm />} />
           <Route path="/plans/edit/:id" element={<EditLearningPlanForm />} />
         </Routes>

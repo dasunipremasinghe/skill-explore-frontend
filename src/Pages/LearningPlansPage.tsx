@@ -12,9 +12,13 @@ type LearningPlan = {
   archived: boolean;
 };
 
+
+
+
 const LearningPlansPage: React.FC = () => {
   const { user } = useAuth();
   const [plans, setPlans] = useState<LearningPlan[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -57,6 +61,12 @@ const LearningPlansPage: React.FC = () => {
     }
   };
   
+  const filteredPlans = plans.filter(plan =>
+    plan.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    plan.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    plan.topics.some(topic => topic.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+  
   
   
   return (
@@ -68,8 +78,25 @@ const LearningPlansPage: React.FC = () => {
         </Link>
        </div>
 
+    <div style={{ marginBottom: "1rem" }}>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search plans by title, topic, or description"
+          style={{ padding: "0.5rem", width: "100%", maxWidth: "400px" }}
+        />
+      </div>
+   
+    {!filteredPlans.length && (
+        <p style={{ fontStyle: "italic", color: "#888" }}>
+          No matching learning plans found.
+        </p>
+)}
+
+    
       <ul>
-        {plans.map((plan) => (
+        {filteredPlans.map((plan) => (
           <li key={plan.id} style={{ marginBottom: "1rem", border: "1px solid #ccc", padding: "1rem" }}>
             <h3>{plan.title}</h3>
             <p>{plan.description}</p>
