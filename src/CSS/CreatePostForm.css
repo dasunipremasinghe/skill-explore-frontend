@@ -1,0 +1,165 @@
+ /* src/components/Post/CreatePostForm.css */
+ .create-post {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    padding: 12px 16px;
+  }
+  
+  .create-post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .post-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 12px;
+    overflow: hidden;
+  }
+  
+  .post-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .post-input-container {
+    flex-grow: 1;
+  }
+  
+  .post-input {
+    width: 100%;
+    height: 40px;
+    border-radius: 20px;
+    border: none;
+    background-color: #f0f2f5;
+    padding: 8px 12px;
+    font-size: 15px;
+    resize: none;
+    transition: height 0.2s;
+  }
+  
+  .post-input:focus {
+    outline: none;
+    height: 80px;
+  }
+  
+  .post-image-preview {
+    margin: 10px 0;
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .post-image-preview img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+  }
+  
+  .remove-image-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  
+  .post-actions-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #e4e6eb;
+  }
+  
+  .post-attachments {
+    display: flex;
+  }
+  
+  .attachment-button {
+    background: none;
+    border: none;
+    color: #65676b;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: background-color 0.2s;
+  }
+  
+  .attachment-button:hover {
+    background-color: #f0f2f5;
+  }
+  
+  .attachment-button i {
+    margin-right: 6px;
+    font-size: 18px;
+  }
+  
+  .attachment-button input[type="file"] {
+    display: none;
+  }
+  
+  .post-submit-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .post-cancel {
+    background: none;
+    border: none;
+    color: #65676b;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 8px;
+    transition: background-color 0.2s;
+  }
+  
+  .post-cancel:hover {
+    background-color: #f0f2f5;
+  }
+  
+  .post-submit {
+    background-color: #1877f2;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .post-submit:hover {
+    background-color: #166fe5;
+  }
+  
+  .post-submit:disabled {
+    background-color: #e4e6eb;
+    color: #bcc0c4;
+    cursor: not-allowed;
+  }
+  
+  

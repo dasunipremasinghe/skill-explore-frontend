@@ -1,0 +1,144 @@
+/* src/components/Layout/Sidebar.css */
+.sidebar {
+    width: 260px;
+    height: calc(100vh - 60px);
+    position: fixed;
+    top: 60px;
+    left: 0;
+    background-color: #ffffff;
+    border-right: 1px solid #e4e6eb;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .sidebar-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #e4e6eb;
+  }
+  
+  .sidebar-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  
+  .sidebar-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .sidebar-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 5px 0;
+  }
+  
+  .sidebar-role {
+    font-size: 14px;
+    color: #65676b;
+    margin: 0;
+  }
+  
+  .sidebar-menu {
+    margin: 20px 0;
+  }
+  
+  .sidebar-menu-item {
+    margin-bottom: 5px;
+  }
+  
+  .sidebar-menu-item a {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #050505;
+    transition: background-color 0.2s;
+  }
+  
+  .sidebar-menu-item a:hover {
+    background-color: #f0f2f5;
+  }
+  
+  .sidebar-menu-item i {
+    margin-right: 10px;
+    font-size: 18px;
+    width: 20px;
+    text-align: center;
+    color: #1877f2;
+  }
+  
+  .sidebar-section {
+    margin: 20px 0;
+    padding-top: 15px;
+    border-top: 1px solid #e4e6eb;
+  }
+  
+  .sidebar-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  
+  .sidebar-courses {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidebar-course {
+    margin-bottom: 8px;
+  }
+  
+  .sidebar-course a {
+    display: block;
+    padding: 8px 10px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+  }
+  
+  .sidebar-course a:hover {
+    background-color: #f0f2f5;
+  }
+  
+  .sidebar-course-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #050505;
+  }
+  
+  .sidebar-course-instructor {
+    font-size: 12px;
+    color: #65676b;
+  }
+  
+  .sidebar-footer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e4e6eb;
+    font-size: 12px;
+    color: #65676b;
+  }
+  
+  .sidebar-links {
+    margin-top: 10px;
+  }
+  
+  .sidebar-links a {
+    margin-right: 10px;
+    color: #65676b;
+    text-decoration: none;
+  }
+  
+  .sidebar-links a:hover {
+    text-decoration: underline;
+  }
+  
