@@ -79,3 +79,14 @@ body {
 .btn-secondary:hover {
   background-color: #5a6268;
 }
+
+
+.btn-upload {
+  background-color: #007bff;
+  color: white;
+  margin-top: 10px;
+}
+
+.btn-upload:hover {
+  background-color: #0056b3;
+}

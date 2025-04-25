@@ -4,6 +4,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import SignUpPage from './Pages/SignUpPage';
 import HomePage from './Pages/HomePage';
 import Profile from './Pages/ProfilePage';
+import UploadMedia from './Pages/UploadMediaPage';
 
 const App: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ const App: React.FC = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/upload" element={<UploadMedia />} />
         </Routes>
       </Router>
     </GoogleOAuthProvider>

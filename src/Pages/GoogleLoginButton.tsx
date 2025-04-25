@@ -26,6 +26,7 @@ const GoogleLoginButton: React.FC = () => {
         localStorage.setItem("auth_token", data.token);
         localStorage.setItem("user_name", `${data.firstName} ${data.lastName}`);
         localStorage.setItem("user_email", data.email);
+        localStorage.setItem("user_id", data.userId);
         navigate('/profile');
       })
       .catch(err => {
@@ -40,24 +41,31 @@ const GoogleLoginButton: React.FC = () => {
       console.error("No token received from Google");
       return;
     }
-
+  
     fetch("http://localhost:8080/api/auth/google", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token }),
+      body: JSON.stringify({ idToken: token }), 
       mode: "cors",
     })
-      .then(res => res.json())
+      .then(async (res) => {
+        if (!res.ok) {
+          const errText = await res.text();
+          throw new Error(errText);
+        }
+        return res.json();
+      })
       .then(data => {
         const fullName = `${data.firstName} ${data.lastName}`;
         localStorage.setItem("google_token", token);
         localStorage.setItem("user_name", fullName);
         localStorage.setItem("user_email", data.email);
+        localStorage.setItem("user_id", data.userId);
         navigate('/profile');
       })
       .catch(err => {
         console.error("Login failed:", err.message || err);
-        alert("Login failed: Something went wrong during Google authentication");
+        alert("Login failed: " + (err.message || "Something went wrong during Google authentication"));
       });
   };
 

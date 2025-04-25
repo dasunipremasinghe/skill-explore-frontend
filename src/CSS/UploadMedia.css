@@ -1,0 +1,92 @@
+.uploader-container {
+    max-width: 500px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    text-align: center;
+  }
+  
+  .upload-label {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #1da1f2;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .upload-label input[type="file"] {
+    display: none;
+  }
+  
+  .error-msg {
+    color: #e0245e;
+    margin-bottom: 10px;
+  }
+  
+  .preview {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .preview img,
+  .preview video {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 12px;
+    margin-top: 10px;
+    object-fit: cover;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .caption-box {
+    width: 100%;
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    min-height: 80px;
+    resize: none;
+  }
+  
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+  }
+  
+  .btn-post,
+  .btn-discard {
+    padding: 10px 20px;
+    font-size: 15px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn-post {
+    background-color: #1da1f2;
+    color: white;
+  }
+  
+  .btn-post:hover {
+    background-color: #0d8ddb;
+  }
+  
+  .btn-discard {
+    background-color: #e0245e;
+    color: white;
+  }
+  
+  .btn-discard:hover {
+    background-color: #c2184d;
+  }
+  
