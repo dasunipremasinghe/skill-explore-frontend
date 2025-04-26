@@ -7,7 +7,10 @@ const MediaUploader: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [caption, setCaption] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null); 
   const [uploading, setUploading] = useState(false);
+
+  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -51,29 +54,36 @@ const MediaUploader: React.FC = () => {
         body: formData,
       });
 
-      const responseText = await response.text(); // parse response for logging
+      const responseText = await response.text();
       console.log("Raw response text:", responseText);
 
       if (!response.ok) {
         throw new Error(`Upload failed: ${response.status} ${response.statusText} - ${responseText}`);
       }
 
-      alert('Post uploaded successfully!');
+      alert('Post uploaded successfully!'); 
+      setSuccess('Post uploaded successfully!'); 
+
       setFile(null);
       setCaption('');
+
+      // Optional: Redirect after 2 seconds
+      // setTimeout(() => navigate('/upload'), 2000);
+      
     } catch (err) {
-        const errorMessage = (err as Error).message || 'Unknown error';
-        console.error('Upload error:', errorMessage);
-        setError('Failed to upload media: ' + errorMessage);
-      } finally {
-        setUploading(false);
-      }
+      const errorMessage = (err as Error).message || 'Unknown error';
+      console.error('Upload error:', errorMessage);
+      setError('Failed to upload media: ' + errorMessage);
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleDiscard = () => {
     setFile(null);
     setCaption('');
     setError(null);
+    setSuccess(null); 
   };
 
   return (
@@ -87,7 +97,11 @@ const MediaUploader: React.FC = () => {
         />
       </label>
 
+      {/* Error message */}
       {error && <div className="error-msg">{error}</div>}
+
+      {/* Success message */}
+      {success && <div className="success-msg">{success}</div>}
 
       {file && (
         <div className="preview">
