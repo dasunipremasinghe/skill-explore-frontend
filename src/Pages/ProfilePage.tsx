@@ -20,6 +20,9 @@ const Profile: React.FC = () => {
           <button className="btn btn-upload" onClick={() => navigate('/upload')}>
             Upload Media
           </button>
+          <button className="btn btn-home" onClick={() => navigate('/home')}>
+            Home Page
+          </button>
         </div>
       </div>
     </div>

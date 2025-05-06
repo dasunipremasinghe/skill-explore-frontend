@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import '../CSS/UploadMedia.css';
 
-const MAX_SIZE_MB = 16;
+const MAX_SIZE_MB = 100;
 
 const MediaUploader: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [caption, setCaption] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null); 
+  const [success, setSuccess] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-
-  
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -24,6 +22,7 @@ const MediaUploader: React.FC = () => {
     }
 
     setError(null);
+    setSuccess(null);
     setFile(selectedFile);
   };
 
@@ -34,19 +33,24 @@ const MediaUploader: React.FC = () => {
     }
 
     const userId = localStorage.getItem('user_id');
-    console.log("Using user_id:", userId);
+    const userName = localStorage.getItem('user_name');
+    const userEmail = localStorage.getItem('user_email');
 
-    if (!userId) {
-      setError('User not logged in.');
+    if (!userId || !userName || !userEmail) {
+      setError('User details missing. Please log in again.');
       return;
     }
 
     setUploading(true);
+    setError(null);
+    setSuccess(null);
 
     const formData = new FormData();
     formData.append('file', file);
     formData.append('caption', caption);
     formData.append('userId', userId);
+    formData.append('userName', userName);
+    formData.append('userEmail', userEmail);
 
     try {
       const response = await fetch('http://localhost:8080/api/media/upload', {
@@ -55,21 +59,13 @@ const MediaUploader: React.FC = () => {
       });
 
       const responseText = await response.text();
-      console.log("Raw response text:", responseText);
-
       if (!response.ok) {
         throw new Error(`Upload failed: ${response.status} ${response.statusText} - ${responseText}`);
       }
 
-      alert('Post uploaded successfully!'); 
-      setSuccess('Post uploaded successfully!'); 
-
+      setSuccess('Post uploaded successfully!');
       setFile(null);
       setCaption('');
-
-      // Optional: Redirect after 2 seconds
-      // setTimeout(() => navigate('/upload'), 2000);
-      
     } catch (err) {
       const errorMessage = (err as Error).message || 'Unknown error';
       console.error('Upload error:', errorMessage);
@@ -83,7 +79,7 @@ const MediaUploader: React.FC = () => {
     setFile(null);
     setCaption('');
     setError(null);
-    setSuccess(null); 
+    setSuccess(null);
   };
 
   return (
@@ -97,20 +93,18 @@ const MediaUploader: React.FC = () => {
         />
       </label>
 
-      {/* Error message */}
       {error && <div className="error-msg">{error}</div>}
-
-      {/* Success message */}
       {success && <div className="success-msg">{success}</div>}
 
       {file && (
         <div className="preview">
           <p>Selected: {file.name}</p>
+
           {file.type.startsWith('image') ? (
             <img src={URL.createObjectURL(file)} alt="preview" />
           ) : (
-            <video controls width="300">
-              <source src={URL.createObjectURL(file)} />
+            <video controls width="100%" style={{ borderRadius: '12px' }}>
+              <source src={URL.createObjectURL(file)} type={file.type} />
               Your browser does not support the video tag.
             </video>
           )}
