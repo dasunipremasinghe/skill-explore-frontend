@@ -1,0 +1,107 @@
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 30px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #d6e6f2;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    font-family: 'Segoe UI', sans-serif;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .header-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin: 0;
+  }
+  
+  /* 🔵 New: Center navigation links */
+  .header-center {
+    display: flex;
+    gap: 24px;
+  }
+  
+  .nav-link {
+    text-decoration: none;
+    color: #2c3e50;
+    font-size: 14px;
+    font-weight: 500;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.3s ease;
+  }
+  
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 0%;
+    height: 2px;
+    background-color: #3498db;
+    transition: width 0.3s ease;
+  }
+  
+  .nav-link:hover {
+    color: #3498db;
+  }
+  
+  .nav-link:hover::after {
+    width: 100%;
+  }
+  
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #3498db;
+  }
+  
+  .user-name {
+    font-size: 14px;
+    color: #2c3e50;
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .header-title {
+      font-size: 18px;
+    }
+  
+    .user-name {
+      display: none;
+    }
+  
+    .avatar {
+      width: 32px;
+      height: 32px;
+    }
+  
+    .header-center {
+      display: none; 
+    }
+  }
+  

@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
+import Header from '../Pages/Header';
 import '../CSS/UploadMedia.css';
 
 const MAX_SIZE_MB = 100;
 
-const MediaUploader: React.FC = () => {
+const UploadMedia: React.FC = () => {
   const [file, setFile] = useState<File | null>(null);
   const [caption, setCaption] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+
+  const name = localStorage.getItem('user_name');
+  const avatar = localStorage.getItem('user_picture');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -63,7 +67,7 @@ const MediaUploader: React.FC = () => {
         throw new Error(`Upload failed: ${response.status} ${response.statusText} - ${responseText}`);
       }
 
-      setSuccess('Post uploaded successfully!');
+      setSuccess('✅ Post uploaded successfully!');
       setFile(null);
       setCaption('');
     } catch (err) {
@@ -83,51 +87,63 @@ const MediaUploader: React.FC = () => {
   };
 
   return (
-    <div className="uploader-container">
-      <label className="upload-label">
-        Upload Media (Image or Video)
-        <input
-          type="file"
-          accept="image/*,video/mp4,video/webm"
-          onChange={handleFileChange}
-        />
-      </label>
+    <>
+      <Header
+        currentUser={{
+          id: 'local-user',
+          name: name || '',
+          avatar: avatar || undefined,
+        }}
+      />
 
-      {error && <div className="error-msg">{error}</div>}
-      {success && <div className="success-msg">{success}</div>}
+      <div className="upload-page-container">
+        <div className="uploader-container">
+          <label className="upload-label">
+            Upload Media (Image or Video)
+            <input
+              type="file"
+              accept="image/*,video/mp4,video/webm"
+              onChange={handleFileChange}
+            />
+          </label>
 
-      {file && (
-        <div className="preview">
-          <p>Selected: {file.name}</p>
+          {error && <div className="error-msg">{error}</div>}
+          {success && <div className="success-msg">{success}</div>}
 
-          {file.type.startsWith('image') ? (
-            <img src={URL.createObjectURL(file)} alt="preview" />
-          ) : (
-            <video controls width="100%" style={{ borderRadius: '12px' }}>
-              <source src={URL.createObjectURL(file)} type={file.type} />
-              Your browser does not support the video tag.
-            </video>
+          {file && (
+            <div className="preview">
+              <p>Selected: {file.name}</p>
+
+              {file.type.startsWith('image') ? (
+                <img src={URL.createObjectURL(file)} alt="preview" />
+              ) : (
+                <video controls width="100%" style={{ borderRadius: '12px' }}>
+                  <source src={URL.createObjectURL(file)} type={file.type} />
+                  Your browser does not support the video tag.
+                </video>
+              )}
+
+              <textarea
+                className="caption-box"
+                placeholder="Write a caption..."
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+              />
+
+              <div className="action-buttons">
+                <button className="btn-post" onClick={handlePost} disabled={uploading}>
+                  {uploading ? 'Posting...' : 'Post'}
+                </button>
+                <button className="btn-discard" onClick={handleDiscard} disabled={uploading}>
+                  Discard
+                </button>
+              </div>
+            </div>
           )}
-
-          <textarea
-            className="caption-box"
-            placeholder="Write a caption..."
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
-          />
-
-          <div className="action-buttons">
-            <button className="btn-post" onClick={handlePost} disabled={uploading}>
-              {uploading ? 'Posting...' : 'Post'}
-            </button>
-            <button className="btn-discard" onClick={handleDiscard} disabled={uploading}>
-              Discard
-            </button>
-          </div>
         </div>
-      )}
-    </div>
+      </div>
+    </>
   );
 };
 
-export default MediaUploader;
+export default UploadMedia;
