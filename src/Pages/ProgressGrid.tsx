@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Progress.css';
+import '../CSS/Progress.css';
 import ProgressCard from './ProgressCard';
 import ProgressModal from './ProgressModal';
 import FloatingAddButton from './FloatingAddButton';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import Footer from './Footer';
+import Header from './Header';
 
 interface ProgressUpdate {
   id?: string;
@@ -21,7 +23,6 @@ export default function ProgressGrid() {
   const [editing, setEditing] = useState<ProgressUpdate | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<string | null>(null);
-
   const currentUserId = 'user123'; // Simulate logged-in user
 
   useEffect(() => {
@@ -29,8 +30,12 @@ export default function ProgressGrid() {
   }, []);
 
   const fetchAllProgress = async () => {
-    const res = await axios.get<ProgressUpdate[]>('http://localhost:8080/api/progress');
-    setItems(res.data);
+    try {
+      const res = await axios.get<ProgressUpdate[]>('http://localhost:8080/api/progress');
+      setItems(res.data);
+    } catch (err) {
+      console.error('Error fetching progress updates', err);
+    }
   };
 
   const handleSave = (newItem: ProgressUpdate) => {
@@ -50,15 +55,20 @@ export default function ProgressGrid() {
 
   const handleDeleteConfirmed = async () => {
     if (itemToDelete) {
-      await axios.delete(`http://localhost:8080/api/progress/${itemToDelete}`);
-      setItems(items.filter((i) => i.id !== itemToDelete));
-      setShowConfirm(false);
-      setItemToDelete(null);
+      try {
+        await axios.delete(`http://localhost:8080/api/progress/${itemToDelete}`);
+        setItems(items.filter((i) => i.id !== itemToDelete));
+        setShowConfirm(false);
+        setItemToDelete(null);
+      } catch (err) {
+        console.error('Error deleting progress', err);
+      }
     }
   };
 
   return (
     <div className="progress-page">
+      <Header currentUser={{ id: 'user123', name: 'John Doe', avatar: '/default-avatar.png' }} />
       <div className="success-section">
         <div className="success-left">
           <h2>Our success<br />stories</h2>
@@ -107,6 +117,8 @@ export default function ProgressGrid() {
           />
         )}
       </div>
+      <Footer />
     </div>
   );
 }
+
