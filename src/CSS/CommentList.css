@@ -1,0 +1,32 @@
+ /* src/components/Comment/CommentList.css */
+ .comments-section {
+    padding: 8px 16px;
+  }
+  
+  .comments-heading {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  
+  .comments-list {
+    margin-top: 12px;
+  }
+  
+  .comments-loading {
+    text-align: center;
+    padding: 12px 0;
+    color: #65676b;
+  }
+  
+  .comments-error {
+    color: #e41e3f;
+    padding: 12px 0;
+  }
+  
+  .no-comments {
+    text-align: center;
+    padding: 12px 0;
+    color: #65676b;
+    font-style: italic;
+  }
