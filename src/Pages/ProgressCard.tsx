@@ -1,8 +1,16 @@
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
-import { ProgressUpdate } from '../../api/progressAPI';
-import './Progress.css';
+import '../CSS/Progress.css';
+import axios from 'axios';
 
 
+interface ProgressUpdate {
+  id?: string;
+  userId: string;
+  title: string;
+  rating: number;
+  description: string;
+  date: string;
+}
 
 interface Props {
   item: ProgressUpdate;
@@ -14,6 +22,17 @@ interface Props {
 export default function ProgressCard({ item, onEdit, onDelete, currentUserId }: Props) {
   const isOwner = item.userId === currentUserId;
 
+  const handleDelete = async (id: string) => {
+    try {
+      
+      await axios.delete(`http://localhost:8080/api/progress/${id}`);
+      onDelete(id);
+    } catch (err) {
+      console.error('Error deleting progress', err);
+    }
+  };
+  
+
   return (
     <div className="testimonial-card">
       <div className="rating">🌟 {item.rating}/5</div>
@@ -23,7 +42,7 @@ export default function ProgressCard({ item, onEdit, onDelete, currentUserId }: 
       {isOwner && (
         <div className="testimonial-actions">
           <button onClick={onEdit} title="Edit"><EditOutlined /></button>
-          <button onClick={() => onDelete(item.id!)} title="Delete"><DeleteOutlined /></button>
+          <button onClick={() => handleDelete(item.id!)} title="Delete"><DeleteOutlined /></button>
         </div>
       )}
     </div>
