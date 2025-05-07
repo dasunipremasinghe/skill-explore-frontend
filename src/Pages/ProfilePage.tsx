@@ -1,5 +1,6 @@
 import React from 'react';
 import '../CSS/Profile.css';
+import { Link } from 'react-router-dom';
 
 const Profile: React.FC = () => {
   const name = localStorage.getItem('user_name');
@@ -15,6 +16,9 @@ const Profile: React.FC = () => {
         <div className="profile-actions">
           <button className="btn">Edit Profile</button>
           <button className="btn btn-secondary">Logout</button>
+          <Link to="/explore">
+              <button style={{ marginBottom: "1rem" }}>🌐 Explore Other Plans</button>
+          </Link>
         </div>
       </div>
     </div>
