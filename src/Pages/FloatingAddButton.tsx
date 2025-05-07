@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import './Progress.css';
+import '../CSS/Progress.css';
 
 export default function FloatingAddButton({ onClick }: { onClick: () => void }) {
   return (
