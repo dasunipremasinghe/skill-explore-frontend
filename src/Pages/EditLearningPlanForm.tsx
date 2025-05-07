@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { apiFetch } from "../api/api";
+import ProgressTracker from "../Pages/ProgressTracker";
 
 type Resource = {
   name: string;
@@ -23,7 +24,7 @@ type LearningPlan = {
 };
 
 const EditLearningPlanForm: React.FC = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // Using `id` from the URL params
   const navigate = useNavigate();
 
   const [plan, setPlan] = useState<LearningPlan | null>(null);
@@ -174,6 +175,7 @@ const EditLearningPlanForm: React.FC = () => {
 
         <br /><br />
         <button type="submit">✅ Save Changes</button>
+        <ProgressTracker learningPlanId={id} />
       </form>
     </div>
   );

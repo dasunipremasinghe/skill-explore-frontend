@@ -39,9 +39,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (Date.now() > exp) {
           logout();
         } else {
+          console.log("Decoded Google token payload:", payload);
+          const fullName = payload.name?.trim() ||
+                           [payload.given_name, payload.family_name].filter(Boolean).join(" ") ||
+                           "Anonymous";
           setUser({
             email: payload.email,
-            name: payload.name || `${payload.given_name ?? ""} ${payload.family_name ?? ""}`.trim()
+            name: fullName
           });
         }
       } catch (err) {
@@ -67,5 +71,4 @@ export const useAuth = (): AuthContextType => {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-};5
-
+};
