@@ -1,8 +1,16 @@
 import { useState, useEffect } from 'react';
-import { ProgressUpdate, createProgress, updateProgress } from '../../api/progressAPI';
-import './Progress.css';
 import { Rate, message } from 'antd';
 import axios from 'axios';
+import '../CSS/Progress.css';
+
+interface ProgressUpdate {
+  id?: string;
+  userId: string;
+  title: string;
+  rating: number;
+  description: string;
+  date: string;
+}
 
 interface Props {
   onClose: () => void;
@@ -18,7 +26,7 @@ export default function ProgressModal({ onClose, onSave, editing }: Props) {
     rating: 0,
     date: new Date().toISOString().split('T')[0],
   });
-
+  
 
   const [errors, setErrors] = useState({ description: '' });
 
@@ -32,7 +40,6 @@ export default function ProgressModal({ onClose, onSave, editing }: Props) {
   };
 
   useEffect(() => {
-    // Set editing form values
     if (editing) {
       setForm(editing);
     } else {
@@ -62,12 +69,20 @@ export default function ProgressModal({ onClose, onSave, editing }: Props) {
     if (!validateForm()) return;
 
     let result;
-    if (editing && editing.id) {
-      result = await updateProgress(editing.id, form);
-    } else {
-      result = await createProgress(form);
+    try {
+      if (editing && editing.id) {
+        // PUT request for update
+        result = await axios.put(`/api/progress/${editing.id}`, form);
+      } else {
+        // POST request for insert
+        result = await axios.post('/api/progress', form);
+      }
+      onSave(result.data);  // Notify parent component (ProgressGrid)
+      onClose(); // Close modal after save
+    } catch (error) {
+      message.error('Error saving progress update');
+      console.error(error);
     }
-    onSave(result.data);
   };
 
   return (
@@ -90,7 +105,6 @@ export default function ProgressModal({ onClose, onSave, editing }: Props) {
           <div className="modal-actions">
             <button type="button" onClick={onClose}>Cancel</button>
             <button type="submit">Save</button>
-
           </div>
         </form>
       </div>
