@@ -30,6 +30,8 @@ const LearningPlansPage: React.FC = () => {
 
   useEffect(() => {
     if (!user) return;
+    
+    setLoading(true);
 
     apiFetch<LearningPlan[]>(`/learning-plans/user/${user.email}`)
       .then(setPlans)
