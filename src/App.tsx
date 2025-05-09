@@ -8,9 +8,11 @@ import EditLearningPlanForm from "./Pages/EditLearningPlanForm";
 import ExplorePlansPage from "./Pages/ExplorePlansPage";
 import CreateStructuredLearningPlanForm from "./Pages/CreateStructuredLearningPlanForm";
 import ProgressTracker from "./Pages/ProgressTracker";
+import ViewLearningPlanPage from "./Pages/ViewLearningPlanPage";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import { NotificationProvider } from "./context/NotificationContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+
 
 const AppContent: React.FC = () => {
   const { user } = useAuth();
@@ -34,6 +36,8 @@ const AppContent: React.FC = () => {
           <Route path="/create" element={<CreateStructuredLearningPlanForm />} />
           <Route path="plans/create" element={<CreateStructuredLearningPlanForm />} />
           <Route path="/progress" element={<ProgressTracker learningPlanId="example-id" />} />
+          <Route path="/plans/view/:id" element={<ViewLearningPlanPage />} />
+
         </Routes>
       </div>
     </>

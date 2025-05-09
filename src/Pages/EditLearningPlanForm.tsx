@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { apiFetch } from "../api/api";
 import StructuredProgressTracker from "./StructuredProgressTracker";
+import { useAuth } from "../auth/AuthContext";
 
 type Resource = {
   name: string;
@@ -29,12 +30,26 @@ const EditLearningPlanForm: React.FC = () => {
 
   const [plan, setPlan] = useState<LearningPlan | null>(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+
 
   useEffect(() => {
-    apiFetch<LearningPlan>(`/learning-plans/${id}`)
-      .then(setPlan)
-      .finally(() => setLoading(false));
-  }, [id]);
+    const fetchData = async () => {
+      const fetchedPlan = await apiFetch<LearningPlan>(`/learning-plans/${id}`);
+      if (fetchedPlan.userId !== user?.email) {
+        alert("You are not authorized to edit this plan.");
+        navigate(`/plans/view/${id}`);
+        return;
+      }
+      setPlan(fetchedPlan);
+      setLoading(false);
+    };
+  
+    if (id) {
+      fetchData();
+    }
+  }, [id, user, navigate]);
+  
 
   const handleChange = (field: keyof LearningPlan, value: any) => {
     if (!plan) return;

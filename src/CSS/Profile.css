@@ -247,3 +247,9 @@
   flex-wrap: wrap;
   padding: 10px;
 }
+
+.media-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  background-color: #f8fbff;
+}
