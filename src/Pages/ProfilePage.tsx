@@ -99,6 +99,7 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleUnsavePlan = async (planId: string) => {
+    if (!window.confirm("Are you sure you want to delete this plan?")) return;
     try {
       const progress = savedProgress.find(p => p.learningPlanId === planId);
       if (!progress) return;
@@ -146,6 +147,11 @@ const ProfilePage: React.FC = () => {
 
       {/* Main Content */}
       <main className="profile-content">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h3>Your Learning Plans</h3>
+        <button className="btn btn-secondary" onClick={() => navigate("/explore")}>🌍 Explore More Plans</button>
+      </div>
+
         <h3>Your Learning Plans</h3>
         {loading ? (
           <p>Loading your plans...</p>

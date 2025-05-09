@@ -108,7 +108,7 @@ const EditLearningPlanForm: React.FC = () => {
         body: JSON.stringify(plan),
       });
       alert("Plan updated successfully!");
-      navigate("/plans");
+      navigate("/profile");
     } catch (err) {
       console.error("Failed to update", err);
       alert("Failed to update. Please try again.");
@@ -296,10 +296,6 @@ const EditLearningPlanForm: React.FC = () => {
           ✅ Save Changes
         </button>
       </form>
-
-      <hr />
-      <h2 style={{ marginTop: "2rem", color: "#1877f2" }}>Track Your Learning Progress</h2>
-      {id && <StructuredProgressTracker learningPlanId={id} />}
     </div>
   );
 };
