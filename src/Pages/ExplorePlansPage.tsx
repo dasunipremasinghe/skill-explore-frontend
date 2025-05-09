@@ -47,19 +47,26 @@ const ExplorePlansPage: React.FC = () => {
       alert("You must be logged in to save a plan.");
       return;
     }
-
-    const copiedPlan = {
-      title: plan.title,
-      description: plan.description,
-      topics: plan.topics,
-      archived: false,
+  
+    // Instead of cloning, we'll create a progress entry for the current user
+    const progressEntry = {
       userId: user.email,
+      learningPlanId: plan.id,
+      topicProgressList: plan.topics.map((topic) => ({
+        topicName: topic.title,
+        completed: false,
+        resourceProgressList: topic.resources.map((resource) => ({
+          resourceName: resource.name,
+          completed: false,
+        })),
+      })),
     };
-
+  
     try {
-      await apiFetch("/learning-plans", {
+      // Save progress entry, not the plan itself
+      await apiFetch("/user-progress", {
         method: "POST",
-        body: JSON.stringify(copiedPlan),
+        body: JSON.stringify(progressEntry),
       });
       alert("✅ Plan saved to your learning plans!");
     } catch (err) {
@@ -67,6 +74,7 @@ const ExplorePlansPage: React.FC = () => {
       alert("Failed to save plan.");
     }
   };
+  
 
   const calculateTotalHours = (plan: LearningPlan) => {
     return plan.topics.reduce((total, topic) => {

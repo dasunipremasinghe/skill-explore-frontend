@@ -33,33 +33,29 @@ const Header: React.FC<HeaderProps> = ({ currentUser }) => {
       </div>
 
       <nav className="main-nav">
-  <ul>
-    <li className="nav-item">
-      <i className="fas fa-home"></i>
-      <span>Home</span>
-    </li>
-    <li className="nav-item">
-      <i className="fas fa-comments"></i>
-      <span>LearningPlans</span>
-    </li>
-    <li className="nav-item">
-      <i className="fas fa-info-circle"></i>
-      <span>Progress</span>
-    </li>
-    <li className="nav-item">
-      <i className="fas fa-compass"></i>
-      <span>Comments</span>
-    </li>
-  </ul>
-</nav>
-
+        <ul>
+          <li className="nav-item">
+            <i className="fas fa-home"></i>
+            <span>Home</span>
+          </li>
+          <li className="nav-item">
+            <i className="fas fa-comments"></i>
+            <span>LearningPlans</span>
+          </li>
+          <li className="nav-item">
+            <i className="fas fa-info-circle"></i>
+            <span>Progress</span>
+          </li>
+          <li className="nav-item">
+            <i className="fas fa-compass"></i>
+            <span>Comments</span>
+          </li>
+        </ul>
+      </nav>
 
       <div className="header-right">
         <div className="notification-container">
-          <button
-            className="notification-button"
-            onClick={toggleNotificationPanel}
-          >
+          <button className="notification-button" onClick={toggleNotificationPanel}>
             <NotificationsNoneOutlined className="fas fa-bell" />
             {unreadCount > 0 && (
               <span className="notification-badge">{unreadCount}</span>
@@ -81,22 +77,10 @@ const Header: React.FC<HeaderProps> = ({ currentUser }) => {
 
           <div className="user-dropdown">
             <ul>
-              <li>
-                <i className="fas fa-user"></i>
-                <span>Profile</span>
-              </li>
-              <li>
-                <i className="fas fa-cog"></i>
-                <span>Settings</span>
-              </li>
-              <li>
-                <i className="fas fa-question-circle"></i>
-                <span>Help</span>
-              </li>
-              <li>
-                <i className="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
-              </li>
+              <li><i className="fas fa-user"></i><span>Profile</span></li>
+              <li><i className="fas fa-cog"></i><span>Settings</span></li>
+              <li><i className="fas fa-question-circle"></i><span>Help</span></li>
+              <li><i className="fas fa-sign-out-alt"></i><span>Logout</span></li>
             </ul>
           </div>
         </div>
