@@ -1,13 +1,75 @@
+/* Full page wrapper */
+.auth-page-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  background-color: #f5f7fa;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Centered login box */
 .google-login-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 80px;
-    padding: 20px;
-    background-color: #f8f9fa;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 350px;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Input styles */
+.auth-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+/* Primary button */
+.auth-button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.auth-button:hover {
+  background-color: #0056b3;
+}
+
+/* Separator text */
+.separator {
+  margin: 20px 0;
+  color: #888;
+}
+
+/* Google login alignment */
+.google-button {
+  display: flex;
+  justify-content: center;
+}
+
+/* Sign up link */
+.signup-link {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.signup-link span {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+}

@@ -1,0 +1,133 @@
+.upload-page-container {
+  padding-top: 100px;
+  padding-bottom: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100vw;
+  min-height: 100vh;
+  background-color: #f9fbfd;
+  margin: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.uploader-container {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  padding: 0 20px;
+}
+
+/* Upload Button Label */
+.upload-label {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: #3498db;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.upload-label:hover {
+  background-color: #2980b9;
+}
+
+.upload-label input[type="file"] {
+  display: none;
+}
+
+/* Media Preview Container */
+.preview {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.preview img,
+.preview video {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+/* Caption Input */
+.caption-box {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 20px auto;
+  display: block;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #dcdcdc;
+  font-size: 14px;
+  resize: none;
+  outline: none;
+}
+
+.caption-box:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.btn-post,
+.btn-discard {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.btn-post {
+  background-color: #3498db;
+  color: white;
+}
+
+.btn-post:hover {
+  background-color: #2980b9;
+  transform: scale(1.03);
+}
+
+.btn-discard {
+  background-color: #f4f4f4;
+  color: #2c3e50;
+  border: 1px solid #ccc;
+}
+
+.btn-discard:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.03);
+}
+
+/* Feedback Messages */
+.error-msg {
+  color: #e74c3c;
+  font-weight: 500;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.success-msg {
+  color: #2ecc71;
+  font-weight: 500;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

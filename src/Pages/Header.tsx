@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import "../css/Header.css";
-import { NotificationsNoneOutlined } from "@mui/icons-material";
+
 
 interface User {
   id: string | number;
@@ -12,104 +10,6 @@ interface HeaderProps {
   currentUser: User | null;
 }
 
-const Header: React.FC<HeaderProps> = ({ currentUser }) => {
-  const [isNotificationPanelOpen, setIsNotificationPanelOpen] = useState<boolean>(false);
-
-  // Static placeholder for notifications
-  const notifications = [
-    { id: 1, read: false, message: "New progress update available" },
-    { id: 2, read: true, message: "Your profile was updated" },
-  ];
-  const unreadCount = notifications.filter((notification) => !notification.read).length;
-
-  const toggleNotificationPanel = (): void => {
-    setIsNotificationPanelOpen(!isNotificationPanelOpen);
-  };
-
-  return (
-    <header className="header">
-      <div className="header-left">
-        <div className="logo">
-          <h1>Skill-explorer</h1>
-        </div>
-      </div>
-
-      <nav className="main-nav">
-        <ul>
-          <li className="nav-item">
-            <i className="fas fa-home"></i>
-            <span>Home</span>
-          </li>
-          <li className="nav-item">
-            <i className="fas fa-comments"></i>
-            <span>LearningPlans</span>
-          </li>
-          <li className="nav-item">
-            <i className="fas fa-info-circle"></i>
-            <span>Progress</span>
-          </li>
-          <li className="nav-item">
-            <i className="fas fa-compass"></i>
-            <span>Comments</span>
-          </li>
-        </ul>
-      </nav>
-
-      <div className="header-right">
-        <div className="notification-container">
-          <button
-            className="notification-button"
-            onClick={toggleNotificationPanel}
-          >
-            <NotificationsNoneOutlined className="fas fa-bell" />
-            {unreadCount > 0 && (
-              <span className="notification-badge">{unreadCount}</span>
-            )}
-          </button>
-
-          {isNotificationPanelOpen && (
-            <div className="notification-panel">
-              <h3>Notifications</h3>
-              {notifications.map((notification) => (
-                <div key={notification.id} className="notification">
-                  <p>{notification.message}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="user-menu">
-          <div className="user-avatar">
-            <img
-              src={currentUser?.avatar || "/default-avatar.png"}
-              alt={currentUser?.name || "User"}
-            />
-          </div>
-          <span className="user-name">{currentUser?.name || "Guest"}</span>
-          <i className="fas fa-caret-down"></i>
-
-          <div className="user-dropdown">
-            <ul>
-              <li>
-                <i className="fas fa-user"></i>
-                <span>Profile</span>
-              </li>
-              <li>
-                <i className="fas fa-cog"></i>
-                <span>Settings</span>
-              </li>
-              <li>
-                <i className="fas fa-question-circle"></i>
-                <span>Help</span>
-              </li>
-              <li>
-                <i className="fas fa-sign-out-alt"></i>
-                <span>Logout</span>
-              </li>
-            </ul>
-          </div>
-        </div>
       </div>
     </header>
   );
