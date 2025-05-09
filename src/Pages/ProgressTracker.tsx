@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
-    createProgressEntry as createProgress,
-    deleteProgressEntry as deleteProgress,
-    getProgressEntries as getProgressByPlanId,
-    updateProgressEntry as updateProgress,
+  createProgressEntry as createProgress,
+  deleteProgressEntry as deleteProgress,
+  getProgressEntries as getProgressByPlanId,
+  updateProgressEntry as updateProgress,
 } from "../api/progressAPI";
 
 type ProgressEntry = {
@@ -20,6 +20,8 @@ interface Props {
 const ProgressTracker: React.FC<Props> = ({ learningPlanId }) => {
   const [progressList, setProgressList] = useState<ProgressEntry[]>([]);
   const [note, setNote] = useState("");
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editNote, setEditNote] = useState<string>("");
 
   const fetchProgress = async () => {
     const entries = await getProgressByPlanId(learningPlanId);
@@ -36,6 +38,20 @@ const ProgressTracker: React.FC<Props> = ({ learningPlanId }) => {
   const handleDelete = async (id: string) => {
     await deleteProgress(id);
     fetchProgress();
+  };
+
+  const startEdit = (entry: ProgressEntry) => {
+    setEditingId(entry.id);
+    setEditNote(entry.note);
+  };
+
+  const saveEdit = async () => {
+    if (editingId) {
+      await updateProgress(editingId, { note: editNote, date: new Date().toISOString() });
+      setEditingId(null);
+      setEditNote("");
+      fetchProgress();
+    }
   };
 
   useEffect(() => {
@@ -59,13 +75,31 @@ const ProgressTracker: React.FC<Props> = ({ learningPlanId }) => {
       <ul>
         {progressList.map((entry) => (
           <li key={entry.id} style={{ marginTop: "1rem" }}>
-            <strong>{entry.date}</strong>: {entry.note}
-            <button
-              onClick={() => handleDelete(entry.id)}
-              style={{ marginLeft: "1rem" }}
-            >
-              Delete
-            </button>
+            {editingId === entry.id ? (
+              <>
+                <input
+                  value={editNote}
+                  onChange={(e) => setEditNote(e.target.value)}
+                  style={{ padding: "0.5rem", width: "60%" }}
+                />
+                <button onClick={saveEdit} style={{ marginLeft: "0.5rem" }}>
+                  Save
+                </button>
+                <button onClick={() => setEditingId(null)} style={{ marginLeft: "0.5rem" }}>
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <strong>{entry.date}</strong>: {entry.note}
+                <button onClick={() => startEdit(entry)} style={{ marginLeft: "1rem" }}>
+                  ✏️ Edit
+                </button>
+                <button onClick={() => handleDelete(entry.id)} style={{ marginLeft: "0.5rem" }}>
+                  🗑 Delete
+                </button>
+              </>
+            )}
           </li>
         ))}
       </ul>

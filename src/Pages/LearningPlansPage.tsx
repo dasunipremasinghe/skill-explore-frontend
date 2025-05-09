@@ -1,152 +1,117 @@
 import React, { useEffect, useState } from "react";
 import { apiFetch } from "../api/api";
 import { useAuth } from "../auth/AuthContext";
-import { Link } from "react-router-dom";
-
-type Resource = {
-  name: string;
-  url: string;
-  estimatedTimeHours: number;
-};
-
-type Topic = {
-  title: string;
-  resources: Resource[];
-};
+import { useNavigate } from "react-router-dom";
 
 type LearningPlan = {
   id: string;
   title: string;
   description: string;
-  topics: Topic[];
+  userId: string;
   archived: boolean;
 };
 
 const LearningPlansPage: React.FC = () => {
   const { user } = useAuth();
   const [plans, setPlans] = useState<LearningPlan[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
+
+  const fetchPlans = async () => {
+    if (user) {
+      const response = await apiFetch<LearningPlan[]>(`/learning-plans/user/${user.email}`);
+      setPlans(response.filter(plan => !plan.archived));
+    }
+  };
 
   useEffect(() => {
-    if (!user) return;
-    
-    setLoading(true);
-
-    apiFetch<LearningPlan[]>(`/learning-plans/user/${user.email}`)
-      .then(setPlans)
-      .catch((err) => console.error("Failed to fetch plans:", err))
-      .finally(() => setLoading(false));
+    fetchPlans();
   }, [user]);
 
-  const handleDelete = async (id: string) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete this plan?");
-    if (!confirmDelete) return;
+  const handleEdit = (id: string) => {
+    navigate(`/plans/edit/${id}`);
+  };
 
+  const handleDelete = async (id: string) => {
     try {
       await apiFetch(`/learning-plans/${id}`, { method: "DELETE" });
-      setPlans(plans.filter(plan => plan.id !== id));
+      fetchPlans();
     } catch (err) {
       console.error("Delete failed", err);
       alert("Failed to delete plan.");
     }
   };
 
-  const handleArchiveToggle = async (id: string) => {
-    try {
-      const updatedPlan = await apiFetch<LearningPlan>(`/learning-plans/archive/${id}`, {
-        method: "PUT"
-      });
-      setPlans(plans.map(plan => plan.id === id ? updatedPlan : plan));
-    } catch (err) {
-      console.error("Archive toggle failed", err);
-      alert("Failed to update archive status.");
-    }
-  };
-
-  const filteredPlans = plans.filter(plan =>
-    plan.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    plan.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    plan.topics.some(topic => topic.title.toLowerCase().includes(searchQuery.toLowerCase()))
-  );
-
-  if (loading) return <p>Loading plans...</p>;
-
   return (
-    <div style={{ padding: "1rem" }}>
-      <h2>Your Learning Plans</h2>
-
-      <div style={{ marginBottom: "1rem" }}>
-        <Link to="/plans/create">
-          <button style={{ padding: "0.5rem 1rem", fontWeight: "bold" }}>➕ Create New Plan</button>
-        </Link>
+    <div style={{ padding: "2rem", maxWidth: "900px", margin: "auto" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.5rem" }}>
+        <h2 style={{ color: "#1877f2" }}>My Learning Plans</h2>
+        <button
+          onClick={() => navigate("/create")}
+          style={{
+            padding: "10px 16px",
+            backgroundColor: "#1877f2",
+            color: "white",
+            border: "none",
+            borderRadius: "6px",
+            cursor: "pointer",
+            fontWeight: "bold"
+          }}
+        >
+          ➕ Create New Plan
+        </button>
       </div>
 
-      <div style={{ marginBottom: "1rem" }}>
-        <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search plans by title, topic, or description"
-          style={{ padding: "0.5rem", width: "100%", maxWidth: "400px" }}
-        />
-      </div>
-
-      {filteredPlans.length === 0 ? (
-        <p>No learning plans found.</p>
+      {plans.length === 0 ? (
+        <p>You haven't created any plans yet.</p>
       ) : (
-        <ul style={{ listStyle: "none", padding: 0 }}>
-          {filteredPlans.map((plan) => (
-            <li key={plan.id} style={{ marginBottom: "2rem", border: "1px solid #ccc", padding: "1rem", borderRadius: "8px" }}>
-              <h3>{plan.title}</h3>
-              <p>{plan.description}</p>
-              <p>Status: {plan.archived ? "Archived" : "Active"}</p>
+        plans.map((plan) => (
+          <div
+            key={plan.id}
+            style={{
+              background: "#fff",
+              borderRadius: "10px",
+              boxShadow: "0 1px 4px rgba(0,0,0,0.1)",
+              padding: "1rem",
+              marginBottom: "1.5rem",
+            }}
+          >
+            <h3 style={{ marginBottom: "0.5rem", color: "#333" }}>{plan.title}</h3>
+            <p style={{ marginBottom: "1rem", color: "#555" }}>
+              {plan.description.length > 150
+                ? plan.description.slice(0, 150) + "..."
+                : plan.description}
+            </p>
+            <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+              <button
+                onClick={() => handleEdit(plan.id)}
+                style={{
+                  padding: "8px 12px",
+                  backgroundColor: "#1877f2",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                }}
+              >
+                ✏️ Edit
+              </button>
 
-              {/* List Topics */}
-              {plan.topics.length > 0 && (
-                <div>
-                  <h4>Topics:</h4>
-                  <ul>
-                    {plan.topics.map((topic, topicIndex) => (
-                      <li key={topicIndex} style={{ marginBottom: "1rem" }}>
-                        <strong>{topic.title}</strong>
-
-                        {/* List Resources */}
-                        {topic.resources.length > 0 && (
-                          <ul style={{ marginLeft: "1rem" }}>
-                            {topic.resources.map((resource, resIndex) => (
-                              <li key={resIndex}>
-                                <a href={resource.url} target="_blank" rel="noopener noreferrer">
-                                  {resource.name}
-                                </a> {" "}
-                                - {resource.estimatedTimeHours} hours
-                              </li>
-                            ))}
-                          </ul>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* Actions */}
-              <div style={{ marginTop: "1rem" }}>
-                <Link to={`/plans/edit/${plan.id}`}>
-                  <button>Edit</button>
-                </Link>
-                <button style={{ marginLeft: "1rem", backgroundColor: "#ff4d4d", color: "white" }}
-                  onClick={() => handleDelete(plan.id)}>
-                  Delete
-                </button>
-                <button style={{ marginLeft: "1rem", backgroundColor: "#888", color: "white" }}
-                  onClick={() => handleArchiveToggle(plan.id)}>
-                  {plan.archived ? "Unarchive" : "Archive"}
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+              <button
+                onClick={() => handleDelete(plan.id)}
+                style={{
+                  padding: "8px 12px",
+                  backgroundColor: "#d9534f",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "6px",
+                  cursor: "pointer",
+                }}
+              >
+                🗑 Delete
+              </button>
+            </div>
+          </div>
+        ))
       )}
     </div>
   );

@@ -21,9 +21,12 @@ export const apiFetch = async <T = any>(
   });
 
   if (!res.ok) {
-    const errorText = await res.text(); // get response body if available
+    const errorText = await res.text();
     throw new Error(`API Error: ${res.status} ${res.statusText} - ${errorText}`);
-  }  
+  }
 
-  return res.json();
+  // ✅ Safely handle empty responses (e.g., DELETE 204 No Content)
+  const text = await res.text();
+  return text ? JSON.parse(text) : ({} as T);
 };
+
