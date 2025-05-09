@@ -21,12 +21,11 @@ interface Props {
 export default function ProgressModal({ onClose, onSave, editing }: Props) {
   const [form, setForm] = useState<ProgressUpdate>({
     userId: 'user123',
-    title: '',
+    title: 'John Doe', // Provide default title (was failing before)
     description: '',
     rating: 0,
     date: new Date().toISOString().split('T')[0],
   });
-  
 
   const [errors, setErrors] = useState({ description: '' });
 
@@ -42,19 +41,8 @@ export default function ProgressModal({ onClose, onSave, editing }: Props) {
   useEffect(() => {
     if (editing) {
       setForm(editing);
-    } else {
-      fetchUserName('user123');
     }
   }, [editing]);
-
-  const fetchUserName = async (userId: string) => {
-    try {
-      const res = await axios.get(`/api/users/${userId}`);
-      setForm(prev => ({ ...prev, title: res.data.name || 'Unknown User' }));
-    } catch (err) {
-      message.error('Failed to fetch user name');
-    }
-  };
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -68,20 +56,27 @@ export default function ProgressModal({ onClose, onSave, editing }: Props) {
     e.preventDefault();
     if (!validateForm()) return;
 
-    let result;
     try {
-      if (editing && editing.id) {
-        // PUT request for update
-        result = await axios.put(`/api/progress/${editing.id}`, form);
-      } else {
-        // POST request for insert
-        result = await axios.post('/api/progress', form);
-      }
-      onSave(result.data);  // Notify parent component (ProgressGrid)
-      onClose(); // Close modal after save
+      const url = editing?.id
+        ? `http://localhost:8080/api/progress/${editing.id}`
+        : `http://localhost:8080/api/progress`;
+
+      const method = editing?.id ? 'put' : 'post';
+
+      const response = await axios({
+        method,
+        url,
+        data: form,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      onSave(response.data);
+      onClose();
     } catch (error) {
-      message.error('Error saving progress update');
-      console.error(error);
+      console.error('Error saving progress update:', error);
+      message.error('Failed to save progress update');
     }
   };
 
