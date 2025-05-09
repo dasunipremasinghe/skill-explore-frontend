@@ -20,7 +20,7 @@ const AppContent: React.FC = () => {
   const currentUser = {
     id: user?.email || "guest",
     name: user?.name || "Guest",
-    avatar: "/default-avatar.png", // add user?.picture if you're capturing it
+    avatar: user?.picture || "/default-avatar.png" // ✅ fixed
   };
 
   return (

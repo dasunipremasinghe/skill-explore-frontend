@@ -48,7 +48,14 @@ const ExplorePlansPage: React.FC = () => {
       return;
     }
   
-    // Instead of cloning, we'll create a progress entry for the current user
+    // 🛑 Check if the plan still exists on backend
+    try {
+      await apiFetch(`/learning-plans/${plan.id}`);
+    } catch (err) {
+      alert("❌ This plan no longer exists or was deleted.");
+      return;
+    }
+  
     const progressEntry = {
       userId: user.email,
       learningPlanId: plan.id,
@@ -63,7 +70,6 @@ const ExplorePlansPage: React.FC = () => {
     };
   
     try {
-      // Save progress entry, not the plan itself
       await apiFetch("/user-progress", {
         method: "POST",
         body: JSON.stringify(progressEntry),
@@ -74,6 +80,7 @@ const ExplorePlansPage: React.FC = () => {
       alert("Failed to save plan.");
     }
   };
+  
   
 
   const calculateTotalHours = (plan: LearningPlan) => {

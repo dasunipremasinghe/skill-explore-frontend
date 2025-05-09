@@ -69,13 +69,24 @@ const ProfilePage: React.FC = () => {
     try {
       const res = await apiFetch<UserLearningProgress[]>(`/user-progress/${user?.email}`);
       setSavedProgress(res);
+  
       const planIds = res.map(p => p.learningPlanId);
-      const allPlans = await Promise.all(planIds.map(id => apiFetch<LearningPlan>(`/learning-plans/${id}`)));
-      setSavedPlans(allPlans.filter(plan => plan.userId !== user?.email));
+  
+      // Use Promise.allSettled to avoid 404 crashing everything
+      const results = await Promise.allSettled(
+        planIds.map(id => apiFetch<LearningPlan>(`/learning-plans/${id}`))
+      );
+  
+      const validPlans = results
+        .filter(r => r.status === "fulfilled")
+        .map(r => (r as PromiseFulfilledResult<LearningPlan>).value);
+  
+      setSavedPlans(validPlans.filter(plan => plan.userId !== user?.email));
     } catch (err) {
       console.error("Error loading saved plans:", err);
     }
   };
+  
 
   const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this plan?")) return;

@@ -5,7 +5,9 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export type User = {
   email: string;
   name?: string;
+  picture?: string;
 };
+
 
 export type AuthContextType = {
   token: string | null;
@@ -20,6 +22,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
+
   const login = (newToken: string) => {
     localStorage.setItem("google_token", newToken);
     setToken(newToken);
@@ -29,7 +32,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem("google_token");
     setToken(null);
     setUser(null);
+    window.location.href = "/"; // ✅ works outside Router context
   };
+  
 
   useEffect(() => {
     if (token) {
@@ -40,13 +45,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           logout();
         } else {
           console.log("Decoded Google token payload:", payload);
-          const fullName = payload.name?.trim() ||
-                           [payload.given_name, payload.family_name].filter(Boolean).join(" ") ||
-                           "Anonymous";
-          setUser({
-            email: payload.email,
-            name: fullName
-          });
+          const fullName =
+            payload.name?.trim() ||
+            [payload.given_name, payload.family_name].filter(Boolean).join(" ") ||
+            "Anonymous";
+            setUser({
+              email: payload.email,
+              name: fullName,
+              picture: localStorage.getItem("user_picture") || "/default-avatar.png"  // ✅ Add this
+            });   
         }
       } catch (err) {
         console.error("Invalid token format:", err);
