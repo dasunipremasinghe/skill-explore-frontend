@@ -24,7 +24,10 @@ const Header: React.FC<HeaderProps> = ({ currentUser }) => {
       <nav className="header-center">
         <Link to="/" className="nav-link">Home</Link>
         <Link to="/skill-updates" className="nav-link">Skill Updates</Link>
-        <Link to="/profile" className="nav-link">Profile</Link> {/* ✅ Profile Link */}
+        <Link to="/profile" className="nav-link">Profile</Link>
+        <Link to="/comments" className="nav-link">Comments</Link>
+        <Link to="/learning-plans" className="nav-link">Learning Plans</Link>
+        <Link to="/progress" className="nav-link">Progress</Link>
       </nav>
 
       <div className="header-right">
