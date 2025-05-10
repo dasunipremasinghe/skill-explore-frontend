@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../CSS/SignUp.css'; 
+import '../CSS/SignUp.css';
 
 const SignUpPage: React.FC = () => {
   const navigate = useNavigate();
@@ -10,11 +10,11 @@ const SignUpPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [picture, setPicture] = useState('');
+  const [mobileNumber, setMobileNumber] = useState('');
 
   const handleSignUp = async () => {
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
-      alert("All fields are required except profile picture");
+      alert("All fields are required except mobile number");
       return;
     }
 
@@ -28,8 +28,7 @@ const SignUpPage: React.FC = () => {
       lastName,
       email,
       password,
-      picture,
-      authProvider: "local"
+      mobileNumber
     };
 
     try {
@@ -44,7 +43,7 @@ const SignUpPage: React.FC = () => {
         navigate('/login');
       } else {
         const errData = await response.json();
-        alert(`Signup failed: ${errData.message}`);
+        alert(`Signup failed: ${errData.message || errData}`);
       }
     } catch (error) {
       console.error("Signup error:", error);
@@ -53,57 +52,59 @@ const SignUpPage: React.FC = () => {
   };
 
   return (
-    <div className="signup-container">
-      <h2>Sign Up</h2>
-      <input
-        type="text"
-        placeholder="First Name"
-        value={firstName}
-        className="signup-input"
-        onChange={(e) => setFirstName(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Last Name"
-        value={lastName}
-        className="signup-input"
-        onChange={(e) => setLastName(e.target.value)}
-      />
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        className="signup-input"
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        className="signup-input"
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        className="signup-input"
-        onChange={(e) => setConfirmPassword(e.target.value)}
-      />
-      <input
-        type="text"
-        placeholder="Profile Picture URL (optional)"
-        value={picture}
-        className="signup-input"
-        onChange={(e) => setPicture(e.target.value)}
-      />
-      <button className="signup-button" onClick={handleSignUp}>
-        Sign Up
-      </button>
-      <p className="signup-link">
-        Already have an account?{" "}
-        <span onClick={() => navigate('/')}>Login here</span>
-      </p>
+    <div className="page-wrapper">
+      <div className="signup-container">
+        <h2>Sign Up</h2>
+        <input
+          type="text"
+          placeholder="First Name"
+          value={firstName}
+          className="signup-input"
+          onChange={(e) => setFirstName(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={lastName}
+          className="signup-input"
+          onChange={(e) => setLastName(e.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          className="signup-input"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          className="signup-input"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          className="signup-input"
+          onChange={(e) => setConfirmPassword(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Mobile Number (optional)"
+          value={mobileNumber}
+          className="signup-input"
+          onChange={(e) => setMobileNumber(e.target.value)}
+        />
+        <button className="signup-button" onClick={handleSignUp}>
+          Sign Up
+        </button>
+        <p className="signup-link">
+          Already have an account?{" "}
+          <span onClick={() => navigate('/login')}>Login here</span>
+        </p>
+      </div>
     </div>
   );
 };
