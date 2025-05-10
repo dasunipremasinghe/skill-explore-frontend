@@ -8,29 +8,35 @@ const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleNormalLogin = () => {
+  const handleNormalLogin = async () => {
     if (!email || !password) {
       alert("Please enter both email and password.");
       return;
     }
 
-    fetch("http://localhost:8080/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    })
-      .then(res => res.json())
-      .then(data => {
-        localStorage.setItem("auth_token", data.token);
-        localStorage.setItem("user_name", `${data.firstName} ${data.lastName}`);
-        localStorage.setItem("user_email", data.email);
-        localStorage.setItem("user_id", data.userId);
-        navigate('/profile');
-      })
-      .catch(err => {
-        console.error("Login error:", err);
-        alert("Login failed. Please check your credentials.");
+    try {
+      const response = await fetch("http://localhost:8080/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Login failed");
+      }
+
+      const data = await response.json();
+
+      localStorage.setItem("user_id", data.userId);
+      localStorage.setItem("user_email", data.email);
+      localStorage.setItem("user_name", `${data.firstName} ${data.lastName}`);
+      navigate('/profile');
+    } catch (err) {
+  console.error("Login error:", err);
+  const errorMessage = err instanceof Error ? err.message : "Unexpected login error";
+  alert(`Login failed: ${errorMessage}`);
+}
   };
 
   const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
@@ -91,7 +97,8 @@ const Login: React.FC = () => {
         </div>
 
         <p className="signup-link">
-          Don't have an account? <span onClick={() => navigate('/signup')}>Sign Up</span>
+          Don't have an account?{" "}
+          <span onClick={() => navigate('/signup')}>Sign Up</span>
         </p>
       </div>
     </div>
