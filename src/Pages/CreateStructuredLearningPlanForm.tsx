@@ -76,7 +76,7 @@ const CreateStructuredLearningPlanForm: React.FC = () => {
         }),
       });
       alert("Learning plan created successfully!");
-      navigate("/plans");
+      navigate("/profile");
     } catch (err) {
       console.error("Failed to create learning plan", err);
       alert("Failed to create plan. Please try again.");

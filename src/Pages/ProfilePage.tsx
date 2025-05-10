@@ -69,13 +69,24 @@ const ProfilePage: React.FC = () => {
     try {
       const res = await apiFetch<UserLearningProgress[]>(`/user-progress/${user?.email}`);
       setSavedProgress(res);
+  
       const planIds = res.map(p => p.learningPlanId);
-      const allPlans = await Promise.all(planIds.map(id => apiFetch<LearningPlan>(`/learning-plans/${id}`)));
-      setSavedPlans(allPlans.filter(plan => plan.userId !== user?.email));
+  
+      // Use Promise.allSettled to avoid 404 crashing everything
+      const results = await Promise.allSettled(
+        planIds.map(id => apiFetch<LearningPlan>(`/learning-plans/${id}`))
+      );
+  
+      const validPlans = results
+        .filter(r => r.status === "fulfilled")
+        .map(r => (r as PromiseFulfilledResult<LearningPlan>).value);
+  
+      setSavedPlans(validPlans.filter(plan => plan.userId !== user?.email));
     } catch (err) {
       console.error("Error loading saved plans:", err);
     }
   };
+  
 
   const handleDelete = async (id: string) => {
     if (!window.confirm("Are you sure you want to delete this plan?")) return;
@@ -88,6 +99,7 @@ const ProfilePage: React.FC = () => {
   };
 
   const handleUnsavePlan = async (planId: string) => {
+    if (!window.confirm("Are you sure you want to delete this plan?")) return;
     try {
       const progress = savedProgress.find(p => p.learningPlanId === planId);
       if (!progress) return;
@@ -135,6 +147,11 @@ const ProfilePage: React.FC = () => {
 
       {/* Main Content */}
       <main className="profile-content">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h3>Your Learning Plans</h3>
+        <button className="btn btn-secondary" onClick={() => navigate("/explore")}>🌍 Explore More Plans</button>
+      </div>
+
         <h3>Your Learning Plans</h3>
         {loading ? (
           <p>Loading your plans...</p>
